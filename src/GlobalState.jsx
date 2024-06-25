@@ -2,11 +2,13 @@
 import { createContext, useContext, useState } from "react";
 import { toast } from 'react-toastify';
 import { customAxiosInstance } from "./axiosClient";
+import { useNavigate } from "react-router";
 
 
 const GlobalContext = createContext();
 
 const GlobalProvider = ({ children }) => {
+    const navigate = useNavigate();
     const fetchUserData = async (username) => {
 
 
@@ -19,6 +21,7 @@ const GlobalProvider = ({ children }) => {
                 return (data.user)
             }
         } catch (err) {
+            navigate('/not-found', { state: { message: `Could not find any user named ${username}` } });
             console.error(err);
         }
     }

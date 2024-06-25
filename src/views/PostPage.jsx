@@ -12,12 +12,13 @@ export default () => {
 
     const fetchPostInfo = async () => {
         try {
-            const { data } = await axios.get(`posts/${slug}`)
+            const { data } = await customAxiosInstance.get(`posts/${slug}`)
 
             if (!data) return
             console.log(data)
             setPost(data.foundPost);
         } catch (err) {
+            navigate('/not-found', { state: { message: `Could not find the post you were looking for :(` } });
             console.error(err);
         }
     }

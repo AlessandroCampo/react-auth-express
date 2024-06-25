@@ -5,6 +5,7 @@ import { HiOutlineLockClosed as PassIcon, HiOutlineUser as UserIcon } from "reac
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 export default function () {
@@ -125,14 +126,19 @@ export default function () {
                 >
                     Log In
                 </button >
-                <button
+                {/* <button
                     className="bg-input hover:bg-gray-900 text-gray-400 border-0 border-gray-400 text-lg font-bold py-2 px-4 rounded-xl transition duration-300"
                 >
                     Forgot your password ?
-                </button >
-                <p className="font-bold text-xl mt-3 cursor-pointer" >
-                    Don't have an account yet?
-                </p >
+                </button > */}
+                <Link
+                    to="/register"
+                >
+
+                    <p className="font-bold text-lg mt-3 cursor-pointer" >
+                        Don't have an account yet?
+                    </p >
+                </Link>
             </form >
         </div>
     )

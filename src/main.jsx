@@ -8,6 +8,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
 } from "react-router-dom";
 import Home from './views/Home.jsx';
@@ -19,6 +20,7 @@ import { AuthProvider } from './contexts/AuthContext.jsx';
 import AuthLayout from './views/layouts/AuthLayout.jsx';
 import RegisterPage from './views/RegisterPage.jsx';
 import AuthMiddleware from './middlewares/AuthMiddleware.jsx';
+import NotFound from './views/NotFound.jsx';
 
 
 
@@ -89,6 +91,18 @@ const router = createBrowserRouter([
         element: <RegisterPage />,
       }
     ]
+  },
+  {
+    path: '/not-found',
+    element: (
+      <GlobalProvider>
+        <NotFound />
+      </GlobalProvider>
+    ),
+  },
+  {
+    path: '*',
+    element: <Navigate to="/not-found" replace />,
   },
 ]);
 

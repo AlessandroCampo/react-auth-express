@@ -48,16 +48,19 @@ const Home = () => {
 
 
     const fetchPosts = async (page = 1) => {
-
         customAxiosInstance.get(`posts?page=${page}`)
             .then((res) => {
                 if (res) {
                     setTotalPages(res.data.totalPages);
-                    setPostList(oldList => [...oldList, ...res.data.allPosts]);
+
+                    setPostList(oldList => {
+                        const oldPostIds = new Set(oldList.map(post => post.id));
+                        const newUniquePosts = res.data.allPosts.filter(post => !oldPostIds.has(post.id));
+                        return [...oldList, ...newUniquePosts];
+                    });
                 }
             })
             .catch(err => console.error(err));
-
     }
 
 
