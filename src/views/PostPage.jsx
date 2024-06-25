@@ -25,7 +25,7 @@ export default () => {
 
     useEffect(() => {
         fetchPostInfo()
-    }, [slug])
+    }, [slug, post?.comments, post?.likes])
 
 
     return (

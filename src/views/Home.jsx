@@ -106,10 +106,7 @@ const Home = () => {
     return (
         <>
 
-            <ToastContainer
-                theme="dark"
-                hideProgressBar
-            />
+
 
             <div className="home-container overflow-auto">
                 <div className="home-middle w-full flex items-center flex-col py-12">

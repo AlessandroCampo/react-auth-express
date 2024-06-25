@@ -26,7 +26,7 @@ export default function ({ comment, isLastComment }) {
 
             <div className={`p-6 flex justify-between items-center  ${isLastComment ? '' : 'border-b mb-gray-400'}`}>
 
-                <div className="upper-left flex gap-3">
+                <div className="upper-left flex gap-3 flex-col items-start">
 
                     <Avatar
                         sx={{ bgcolor: '#DAA520', color: 'gray', width: 48, height: 48 }}
@@ -47,11 +47,11 @@ export default function ({ comment, isLastComment }) {
                     </div>
                 </div>
 
-                <div className="w-1/2">
+                <div className="w-3/5">
                     {comment?.content}
                 </div>
 
-                <div className="icons-container">
+                <div className="icons-container flex flex-col gap-3">
                     <div className="iconandcounter">
                         <FaRegHeart
                             className="icon-common"

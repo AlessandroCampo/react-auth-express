@@ -8,6 +8,7 @@ import './post.css';
 import { formatTimestamp } from "../../utils";
 import CustomizedMenus from "./PostDropdown";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { FiSend as SendIcon } from "react-icons/fi";
 
 import { customAxiosInstance } from "../../axiosClient";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,6 +27,7 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
     const { notifyError, notifySuccess } = useGlobal();
     const isUserPost = post?.userId == user?.id;
     const navigate = useNavigate();
+    const [newComment, setNewComment] = useState('');
 
     const isLikedByUser = post.likes.find(l => l.userId === user?.id) !== undefined;
 
@@ -93,6 +95,34 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
                 });
             }
         } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const addComment = async () => {
+        if (!newComment) return
+
+        const sentData = {
+            content: newComment
+        }
+
+        try {
+            const { data } = await customAxiosInstance.post(`posts/${post.slug}/comment`, sentData);
+            if (data) {
+                console.log(data.newComment)
+                setNewComment('');
+                setPostList(oldList => {
+                    return oldList.map(p => {
+                        if (p.id === post.id) {
+                            return { ...p, comments: [data.newComment, ...p.comments] }
+                        }
+                        return p
+                    })
+                })
+                notifySuccess('Our app is now enriched with your amazing opinion')
+            }
+        } catch (err) {
+            notifyError('An error occurred while adding your comment, but I think the world will survive without your opinion')
             console.error(err);
         }
     };
@@ -194,6 +224,7 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
                     <div className="iconandcounter">
                         <FaRegComment
                             className="icon-common"
+                            onClick={navigateToPostDetail}
                         />
                         <span className="counter">
                             {post?.comments?.length || 0}
@@ -213,11 +244,20 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
 
 
             </div>
-            <div className="add-comment px-6 w-full">
+            <div className="add-comment px-6 w-full flex items-center">
                 <input type="text"
                     placeholder="Add your opinion no one asked for here..."
-                    className="w-full custom-placeholder"
+                    className="w-full custom-placeholder text-sm"
+                    value={newComment}
+                    onChange={(e) => { setNewComment(e.target.value) }}
                 />
+                {
+                    newComment.length > 0 &&
+                    <SendIcon
+                        className="text-lg"
+                        onClick={addComment}
+                    />
+                }
             </div>
         </div>
 
