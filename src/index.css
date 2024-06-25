@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+button {
+    @apply bg-theme text-gray-800 px-6 py-1 rounded-xl cursor-pointer font-semibold hover:bg-theme-dark hover:scale-105
+}
+
+input, textarea, .textarea {
+    @apply bg-transparent resize-none focus:ring-0 outline-none focus:bg-transparent
+}
+
+textarea, .textarea {
+    @apply p-2 rounded-lg
+}
+
+.icon-common {
+    @apply text-theme text-2xl cursor-pointer hover:text-theme-dark hover:scale-105
+}
+
+body {
+    @apply bg-[#121212]
+}
+
+.home-container {
+    @apply flex justify-between items-start
+}
+
+.posts-container {
+    @apply flex flex-col gap-12 mt-24 mx-auto
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.fixed-aside {
+    position: fixed;
+    width: 500px;
+
+}
+
+.single-post {
+    width: 500px !important;
+}

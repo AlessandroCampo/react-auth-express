@@ -1,0 +1,6 @@
+.bg-container {
+    width: 55%;
+    height: 100vh;
+    background-image: url('../../assets/images/login-bg.jpg');
+    background-size: cover;
+}

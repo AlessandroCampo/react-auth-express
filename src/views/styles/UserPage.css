@@ -1,0 +1,3 @@
+.infos-upper button {
+    @apply min-w-[115px] font-bold text-input text-center;
+}
