@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from "react";
 import Avatar from '@mui/material/Avatar';
-import { FaRegComment, FaRegHeart } from "react-icons/fa";
+import { FaRegComment, FaRegHeart, FaHeart } from "react-icons/fa";
 import { GrSync } from "react-icons/gr";
 
 
@@ -27,6 +27,7 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
     const isUserPost = post?.userId == user?.id;
     const navigate = useNavigate();
 
+    const isLikedByUser = post.likes.find(l => l.userId === user?.id) !== undefined;
 
 
     const changePostVisibility = async (boolean) => {
@@ -55,6 +56,46 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
 
 
     }
+
+
+    const likeOrUnlikePost = async () => {
+        try {
+            if (isLikedByUser) {
+
+                const response = await customAxiosInstance.delete(`/posts/${post.slug}/like`);
+                const removedLike = response.data.removedLike;
+
+
+                setPostList(oldPostList => {
+                    return oldPostList.map(oldPost => {
+                        if (oldPost.id === post.id) {
+                            const updatedLikes = oldPost.likes.filter(like => like?.id !== removedLike.id);
+                            return { ...oldPost, likes: updatedLikes };
+                        } else {
+                            return oldPost;
+                        }
+                    });
+                });
+            } else {
+
+                const response = await customAxiosInstance.post(`/posts/${post.slug}/like`);
+                const newLike = response.data.newLike;
+                console.log(newLike)
+                setPostList(oldPostList => {
+                    return oldPostList.map(oldPost => {
+                        if (oldPost.id === post.id) {
+                            const updatedLikes = [...oldPost.likes, newLike];
+                            return { ...oldPost, likes: updatedLikes };
+                        } else {
+                            return oldPost;
+                        }
+                    });
+                });
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const showUserPage = (e) => {
         e.preventDefault()
@@ -131,9 +172,21 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
             <div className="lower">
                 <div className="icons-container">
                     <div className="iconandcounter">
-                        <FaRegHeart
-                            className="icon-common"
-                        />
+                        {
+                            isLikedByUser ?
+                                <FaHeart
+                                    className="icon-common"
+                                    onClick={likeOrUnlikePost}
+                                />
+
+                                :
+                                <FaRegHeart
+                                    className="icon-common"
+                                    onClick={likeOrUnlikePost}
+                                />
+
+                        }
+
                         <span className="counter">
                             {post?.likes?.length || 0}
                         </span>
