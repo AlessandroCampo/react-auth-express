@@ -12,6 +12,8 @@ import { customAxiosInstance } from '../../axiosClient.js';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router';
+import { useGlobal } from '../../GlobalState.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
 
 const StyledMenu = styled((props) => (
@@ -60,6 +62,8 @@ export default function CustomizedMenus({ setPostList, changePostVisibility, pos
     const [openDeleteDialogue, setopenDeleteDialogue] = React.useState(false);
     const open = Boolean(anchorEl);
     const navigate = useNavigate()
+    const { notifyError, notifySuccess } = useGlobal();
+    const { isAdmin } = useAuth();
 
 
     const handleClick = (event) => {
@@ -76,10 +80,11 @@ export default function CustomizedMenus({ setPostList, changePostVisibility, pos
         try {
             const response = await customAxiosInstance.delete(`posts/${post.slug}`)
             if (response) {
-
+                notifySuccess('Your post has been succesfully deleted');
                 setPostList(oldList => (oldList.filter(p => p.id !== post.id)))
             }
         } catch (err) {
+            notifyError('An error occurred while deleting your post');
             console.error(err);
         }
 
@@ -95,7 +100,7 @@ export default function CustomizedMenus({ setPostList, changePostVisibility, pos
 
 
     const options =
-        isUserPost ?
+        isUserPost || isAdmin ?
             [
                 {
                     label: post?.published ? 'Hide' : 'Show',

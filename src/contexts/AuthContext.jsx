@@ -6,6 +6,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(undefined);
     const [token, setToken] = useState('');
+    const isAdmin = user?.isAdmin === true;
     const navigate = useNavigate();
 
 
@@ -23,7 +24,8 @@ const AuthProvider = ({ children }) => {
         token,
         setUser,
         setToken,
-        logout
+        logout,
+        isAdmin
     }
 
     return (

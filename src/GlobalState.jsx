@@ -17,7 +17,7 @@ const GlobalProvider = ({ children }) => {
         try {
             const { data } = await customAxiosInstance.get(`users/${username}`)
             if (data) {
-                console.log(data.user);
+                console.log(data);
                 return (data.user)
             }
         } catch (err) {
