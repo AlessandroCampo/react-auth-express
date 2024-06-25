@@ -23,13 +23,39 @@ export default function () {
 
 
     const validateLoginData = (payload) => {
+        const errors = {};
+
+        if (!payload.username) {
+            errors.username = ['Username is required'];
+        }
 
 
-    }
+        if (!payload.password) {
+            errors.password = ['Password is required'];
+        }
+
+        if (payload.password && payload.password.length < 8) {
+            errors.password = ['Password must be at least 8 characters long'];
+        }
+
+        setLoginErrors({
+            username: [],
+            password: [],
+            ...errors
+        });
+
+
+        return Object.keys(errors).length === 0;
+    };
 
 
     const handleErrors = (errorList) => {
-        const newErrors = {};
+        const newErrors = {
+            username: [],
+            password: [],
+
+        };
+
         errorList.forEach(error => {
             const { path, msg } = error;
             if (!newErrors[path]) {
@@ -38,7 +64,10 @@ export default function () {
             newErrors[path].push(msg);
         });
 
-        setLoginErrors(newErrors);
+        setLoginErrors(prevErrors => ({
+            ...prevErrors,
+            ...newErrors
+        }));
     };
 
 
@@ -52,10 +81,10 @@ export default function () {
         console.log('Password:', password);
         await login({ username, password })
 
-        formRef.current.reset();
+
     };
     const login = async (payload) => {
-
+        if (!validateLoginData(payload)) return
         try {
             const { data } = await axios.post(`${apiUrl}users/login`, payload);
             if (data) {
@@ -63,6 +92,7 @@ export default function () {
                 localStorage.setItem('reactUsername', data.user.username)
                 setUser(data.user);
                 setToken(data.token);
+                formRef.current.reset();
                 console.log(data.user);
                 navigate('/');
 
